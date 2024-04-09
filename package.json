@@ -7,7 +7,14 @@
 		"build": "remix vite:build",
 		"dev": "remix vite:dev",
 		"start": "remix-serve ./build/server/index.js",
-		"typecheck": "tsc"
+		"typecheck": "tsc",
+		"fmt:check": "biome format .",
+		"fmt:fix": "biome format --write .",
+		"lint:check": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"check": "biome check .",
+		"fix": "biome check --apply .",
+		"fix:unsafe": "biome check --apply-unsafe ."
 	},
 	"dependencies": {
 		"@remix-run/node": "^2.8.1",
@@ -18,6 +25,7 @@
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.6.4",
 		"@remix-run/dev": "^2.8.1",
 		"@types/react": "^18.2.20",
 		"@types/react-dom": "^18.2.7",
