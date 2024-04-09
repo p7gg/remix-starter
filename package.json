@@ -5,9 +5,17 @@
 	"type": "module",
 	"scripts": {
 		"build": "remix vite:build",
-		"dev": "remix vite:dev",
+		"dev:local": "cross-env DB_ENV=local remix vite:dev",
+		"dev:live": "remix vite:dev",
 		"start": "remix-serve ./build/server/index.js",
+		"preview:local": "cross-env DB_ENV=local remix-serve ./build/server/index.js",
 		"typecheck": "tsc",
+		"db:generate:local": "cross-env DB_ENV=local drizzle-kit generate:sqlite",
+		"db:generate:live": "drizzle-kit generate:sqlite",
+		"db:push:local": "cross-env DB_ENV=local drizzle-kit push:sqlite",
+		"db:push:live": "drizzle-kit push:sqlite",
+		"studio:live": "drizzle-kit studio",
+		"studio:local": "cross-env DB_ENV=local drizzle-kit studio",
 		"fmt:check": "biome format .",
 		"fmt:fix": "biome format --write .",
 		"lint:check": "biome lint .",
@@ -17,12 +25,16 @@
 		"fix:unsafe": "biome check --apply-unsafe ."
 	},
 	"dependencies": {
+		"@libsql/client": "^0.6.0",
 		"@remix-run/node": "^2.8.1",
 		"@remix-run/react": "^2.8.1",
 		"@remix-run/serve": "^2.8.1",
+		"drizzle-orm": "^0.30.7",
 		"isbot": "^4.1.0",
+		"nanoid": "^5.0.7",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"tiny-invariant": "^1.3.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.4",
@@ -32,6 +44,8 @@
 		"@types/react": "^18.2.20",
 		"@types/react-dom": "^18.2.7",
 		"autoprefixer": "^10.4.19",
+		"cross-env": "^7.0.3",
+		"drizzle-kit": "^0.20.14",
 		"postcss": "^8.4.38",
 		"tailwindcss": "^3.4.3",
 		"typescript": "^5.1.6",
