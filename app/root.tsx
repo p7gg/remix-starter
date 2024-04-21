@@ -1,58 +1,48 @@
 import "./globals.css";
 
-import type { LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction, json } from "@remix-run/node";
 import {
 	Links,
 	Meta,
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-	useLoaderData,
 } from "@remix-run/react";
-import {
-	PreventFlashOnWrongTheme,
-	ThemeProvider,
-	useTheme,
-} from "remix-themes";
-import { themeSessionResolver } from "./sessions.server";
+import { ColorSchemeScript, useColorScheme } from "./lib/color-scheme";
+import { parseColorScheme } from "./lib/color-scheme.server";
 
 export type Loader = typeof loader;
 export const loader = (async ({ request }) => {
-	const { getTheme } = await themeSessionResolver(request);
+	const colorScheme = await parseColorScheme(request);
 
-	return {
-		theme: getTheme(),
-	};
+	return json({ colorScheme });
 }) satisfies LoaderFunction;
 
-export default function AppWithProviders() {
-	const { theme } = useLoaderData<Loader>();
+function Document(props: { children: React.ReactNode }) {
+	const colorScheme = useColorScheme();
 
 	return (
-		<ThemeProvider specifiedTheme={theme} themeAction="/api/set-theme">
-			<App />
-		</ThemeProvider>
-	);
-}
-
-function App() {
-	const data = useLoaderData<Loader>();
-	const [theme] = useTheme();
-
-	return (
-		<html lang="en" className={theme ?? undefined}>
+		<html lang="en" className={`${colorScheme === "dark" ? "dark" : ""}`}>
 			<head>
+				<ColorSchemeScript />
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<Meta />
-				<PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
 				<Links />
 			</head>
 			<body>
-				<Outlet />
+				{props.children}
 				<ScrollRestoration />
 				<Scripts />
 			</body>
 		</html>
+	);
+}
+
+export default function App() {
+	return (
+		<Document>
+			<Outlet />
+		</Document>
 	);
 }

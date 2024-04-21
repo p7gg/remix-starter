@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Form, useLocation, useSubmit } from "@remix-run/react";
+import { useColorScheme } from "~/lib/color-scheme";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -8,34 +10,37 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+	const location = useLocation();
+	const submit = useSubmit();
+	const colorScheme = useColorScheme();
+
 	return (
-		<div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-			<h1>Welcome to Remix</h1>
-			<ul>
-				<li>
-					<a
-						target="_blank"
-						href="https://remix.run/tutorials/blog"
-						rel="noreferrer"
-					>
-						15m Quickstart Blog Tutorial
-					</a>
-				</li>
-				<li>
-					<a
-						target="_blank"
-						href="https://remix.run/tutorials/jokes"
-						rel="noreferrer"
-					>
-						Deep Dive Jokes App Tutorial
-					</a>
-				</li>
-				<li>
-					<a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-						Remix Docs
-					</a>
-				</li>
-			</ul>
+		<div>
+			<Form
+				preventScrollReset
+				replace
+				action="/_actions/color-scheme"
+				method="post"
+				className="flex flex-col gap-px"
+			>
+				<input
+					type="hidden"
+					name="returnTo"
+					value={location.pathname + location.search}
+				/>
+
+				<select
+					name="colorScheme"
+					defaultValue={colorScheme}
+					onChange={(e) => {
+						submit(e.target.form);
+					}}
+				>
+					<option value="light">Light</option>
+					<option value="dark">Dark</option>
+					<option value="system">System</option>
+				</select>
+			</Form>
 		</div>
 	);
 }
