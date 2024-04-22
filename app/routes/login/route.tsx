@@ -5,7 +5,7 @@ import {
 	redirect,
 } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { redirectIfLoggedInLoader, setAuthOnResponse } from "~/sessions.server";
+import { redirectIfLoggedInLoader, setAuthOnResponse } from "~/lib/auth.server";
 import { LoginSchema, useLoginForm } from "./form";
 import { loginUser } from "./queries";
 

@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { requireAuthCookie } from "~/sessions.server";
+import { requireAuthCookie } from "~/lib/auth.server";
 
 export const loader = (async ({ request }) => {
 	await requireAuthCookie(request);
